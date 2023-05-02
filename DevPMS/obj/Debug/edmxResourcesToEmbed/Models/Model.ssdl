@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DPMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Companie">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DateStart" Type="date" />
+    <Property Name="DateEnd" Type="date" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Course">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Plataform" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="DateEnd" Type="date" />
+    <Property Name="Path" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PathImages" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PathCertificated" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Plataform">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="Path" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PathImages" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="LinkedIn" Type="bit" Nullable="false" />
+    <Property Name="GitHub" Type="bit" Nullable="false" />
+    <Property Name="ToPerfect" Type="varchar" MaxLength="50" />
+    <Property Name="Others" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RT_Course_Stack">
+    <Key>
+      <PropertyRef Name="Course" />
+      <PropertyRef Name="TechStack" />
+    </Key>
+    <Property Name="Course" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TechStack" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RT_Project_Stack">
+    <Key>
+      <PropertyRef Name="Project" />
+      <PropertyRef Name="TechStack" />
+    </Key>
+    <Property Name="Project" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TechStack" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TechStack">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Course_Plataform">
+    <End Role="Plataform" Type="Self.Plataform" Multiplicity="1" />
+    <End Role="Course" Type="Self.Course" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Plataform">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="Course">
+        <PropertyRef Name="Plataform" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RT_Course_Stack_Course">
+    <End Role="Course" Type="Self.Course" Multiplicity="1" />
+    <End Role="RT_Course_Stack" Type="Self.RT_Course_Stack" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Course">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="RT_Course_Stack">
+        <PropertyRef Name="Course" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RT_Course_Stack_TechStack">
+    <End Role="TechStack" Type="Self.TechStack" Multiplicity="1" />
+    <End Role="RT_Course_Stack" Type="Self.RT_Course_Stack" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TechStack">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="RT_Course_Stack">
+        <PropertyRef Name="TechStack" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RT_Project_Stack_Project">
+    <End Role="Project" Type="Self.Project" Multiplicity="1" />
+    <End Role="RT_Project_Stack" Type="Self.RT_Project_Stack" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="RT_Project_Stack">
+        <PropertyRef Name="Project" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RT_Project_Stack_TechStack">
+    <End Role="TechStack" Type="Self.TechStack" Multiplicity="1" />
+    <End Role="RT_Project_Stack" Type="Self.RT_Project_Stack" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TechStack">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="RT_Project_Stack">
+        <PropertyRef Name="TechStack" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DPMSModelStoreContainer">
+    <EntitySet Name="Companie" EntityType="Self.Companie" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Plataform" EntityType="Self.Plataform" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RT_Course_Stack" EntityType="Self.RT_Course_Stack" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RT_Project_Stack" EntityType="Self.RT_Project_Stack" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TechStack" EntityType="Self.TechStack" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Course_Plataform" Association="Self.FK_Course_Plataform">
+      <End Role="Plataform" EntitySet="Plataform" />
+      <End Role="Course" EntitySet="Course" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RT_Course_Stack_Course" Association="Self.FK_RT_Course_Stack_Course">
+      <End Role="Course" EntitySet="Course" />
+      <End Role="RT_Course_Stack" EntitySet="RT_Course_Stack" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RT_Course_Stack_TechStack" Association="Self.FK_RT_Course_Stack_TechStack">
+      <End Role="TechStack" EntitySet="TechStack" />
+      <End Role="RT_Course_Stack" EntitySet="RT_Course_Stack" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RT_Project_Stack_Project" Association="Self.FK_RT_Project_Stack_Project">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="RT_Project_Stack" EntitySet="RT_Project_Stack" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RT_Project_Stack_TechStack" Association="Self.FK_RT_Project_Stack_TechStack">
+      <End Role="TechStack" EntitySet="TechStack" />
+      <End Role="RT_Project_Stack" EntitySet="RT_Project_Stack" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

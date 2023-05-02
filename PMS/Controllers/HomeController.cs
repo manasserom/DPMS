@@ -1,22 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMS.Models;
 using System.Diagnostics;
+using DesignPatterns.Repository;
+using DesignPatterns.Models.Data;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+
 
 namespace PMS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly IOptions<MyConfig> _config;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IRepository<Plataform> _repository;
+        public HomeController(
+            //IOptions<MyConfig> config,
+            IRepository<Plataform> repository)
         {
-            _logger = logger;
+            //_config = config;
+            _repository = repository;
         }
 
         public IActionResult Index()
         {
-            return View();
+            //Log.GetInstance(_config.Value.PathLog).Save("Entro a index");
+
+            IEnumerable<Plataform> lst = _repository.Get();
+
+            return View("Index", lst);
         }
+
 
         public IActionResult Privacy()
         {

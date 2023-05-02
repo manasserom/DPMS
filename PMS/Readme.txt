@@ -1,0 +1,1 @@
+Scaffold-DbContext "Server=DELL\SQLEXPRESS; Database=DPMS; Trusted_Connection=true; TrustServerCertificate=true;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force

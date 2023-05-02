@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DPMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Companie">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateStart" Type="DateTime" Precision="0" />
+    <Property Name="DateEnd" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Course">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Plataform" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateEnd" Type="DateTime" Precision="0" />
+    <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PathImages" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PathCertificated" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Plataform1" Relationship="Self.FK_Course_Plataform" FromRole="Course" ToRole="Plataform" />
+    <NavigationProperty Name="TechStack" Relationship="Self.RT_Course_Stack" FromRole="Course" ToRole="TechStack" />
+  </EntityType>
+  <EntityType Name="Plataform">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Course" Relationship="Self.FK_Course_Plataform" FromRole="Plataform" ToRole="Course" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Path" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PathImages" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LinkedIn" Type="Boolean" Nullable="false" />
+    <Property Name="GitHub" Type="Boolean" Nullable="false" />
+    <Property Name="ToPerfect" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Others" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TechStack" Relationship="Self.RT_Project_Stack" FromRole="Project" ToRole="TechStack" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TechStack">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Course" Relationship="Self.RT_Course_Stack" FromRole="TechStack" ToRole="Course" />
+    <NavigationProperty Name="Project" Relationship="Self.RT_Project_Stack" FromRole="TechStack" ToRole="Project" />
+  </EntityType>
+  <Association Name="FK_Course_Plataform">
+    <End Role="Plataform" Type="Self.Plataform" Multiplicity="1" />
+    <End Role="Course" Type="Self.Course" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Plataform">
+        <PropertyRef Name="Name" />
+      </Principal>
+      <Dependent Role="Course">
+        <PropertyRef Name="Plataform" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RT_Course_Stack">
+    <End Role="Course" Type="Self.Course" Multiplicity="*" />
+    <End Role="TechStack" Type="Self.TechStack" Multiplicity="*" />
+  </Association>
+  <Association Name="RT_Project_Stack">
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <End Role="TechStack" Type="Self.TechStack" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="DPMSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Companie" EntityType="Self.Companie" />
+    <EntitySet Name="Course" EntityType="Self.Course" />
+    <EntitySet Name="Plataform" EntityType="Self.Plataform" />
+    <EntitySet Name="Project" EntityType="Self.Project" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="TechStack" EntityType="Self.TechStack" />
+    <AssociationSet Name="FK_Course_Plataform" Association="Self.FK_Course_Plataform">
+      <End Role="Plataform" EntitySet="Plataform" />
+      <End Role="Course" EntitySet="Course" />
+    </AssociationSet>
+    <AssociationSet Name="RT_Course_Stack" Association="Self.RT_Course_Stack">
+      <End Role="Course" EntitySet="Course" />
+      <End Role="TechStack" EntitySet="TechStack" />
+    </AssociationSet>
+    <AssociationSet Name="RT_Project_Stack" Association="Self.RT_Project_Stack">
+      <End Role="Project" EntitySet="Project" />
+      <End Role="TechStack" EntitySet="TechStack" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
